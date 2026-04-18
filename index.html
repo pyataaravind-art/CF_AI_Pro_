@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>List vs Set Comparison</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background-color: #f4f4f4;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    input {
+      padding: 8px;
+      margin: 5px;
+      width: 250px;
+    }
+
+    button {
+      padding: 10px;
+      margin: 10px;
+      background-color: blue;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .box {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      width: 230px;
+      box-shadow: 0 0 5px gray;
+    }
+  </style>
+
+</head>
+<body>
+
+<h2>List vs Set Membership Check</h2>
+
+<input type="text" id="arrayInput" placeholder="Enter numbers (e.g. 1,2,2,3)">
+<br>
+<input type="number" id="searchValue" placeholder="Enter number to search">
+<br>
+
+<button onclick="compare()">Compare</button>
+
+<h3 id="duplicateInfo"></h3>
+
+<div class="container">
+
+  <div class="box">
+    <h3>LIST</h3>
+    <p id="listResult"></p>
+    <p id="listSteps"></p>
+  </div>
+
+  <div class="box">
+    <h3>SET</h3>
+    <p id="setResult"></p>
+    <p id="setSteps"></p>
+  </div>
+
+</div>
+
+<script>
+
+// 🔹 Get array (simple method)
+function getArray() {
+  let input = document.getElementById("arrayInput").value;
+  let parts = input.split(",");
+  let arr = [];
+
+  for (let i = 0; i < parts.length; i++) {
+    arr.push(Number(parts[i]));
+  }
+
+  return arr;
+}
+
+// 🔹 Main comparison
+function compare() {
+
+  let arr = getArray();
+  let target = Number(document.getElementById("searchValue").value);
+
+  // 🔵 LIST SEARCH
+  let listSteps = 0;
+  let foundInList = false;
+
+  let startList = performance.now();
+
+  for (let i = 0; i < arr.length; i++) {
+    listSteps++;
+    if (arr[i] === target) {
+      foundInList = true;
+      break;
+    }
+  }
+
+  let endList = performance.now();
+
+  // 🟢 SET SEARCH
+  let set = new Set(arr);
+  let setSteps = 1;
+
+  let startSet = performance.now();
+
+  let foundInSet = set.has(target);
+
+  let endSet = performance.now();
+
+  // 🔹 Convert set to array (simple)
+  let uniqueArray = Array.from(set);
+
+  document.getElementById("duplicateInfo").innerText =
+    "After removing duplicates (Set): " + uniqueArray;
+
+  // 🔹 LIST OUTPUT
+  document.getElementById("listResult").innerText =
+    foundInList ? "Found" : "Not Found";
+
+  document.getElementById("listSteps").innerText =
+    "Steps: " + listSteps + " → O(n)";
+
+
+  // 🔹 SET OUTPUT
+  document.getElementById("setResult").innerText =
+    foundInSet ? "Found" : "Not Found";
+
+  document.getElementById("setSteps").innerText =
+    "Steps: " + setSteps + " → O(1)";
+
+}
+
+</script>
+
+</body>
+</html>
